@@ -46,8 +46,15 @@ class MainActivity : AppCompatActivity() {
                 view: WebView,
                 request: WebResourceRequest
             ): WebResourceResponse? {
-                Log.d("WebView", "Intercepting: ${request.url}")
-                return assetLoader.shouldInterceptRequest(request.url)
+                val path = request.url.path ?: ""
+                if (path.contains("favicon")) {
+                    return WebResourceResponse("image/png", null, null)
+                }
+                return try {
+                    assetLoader.shouldInterceptRequest(request.url)
+                } catch (e: Exception) {
+                    null
+                }
             }
         }
         webView.webChromeClient = object : WebChromeClient() {
