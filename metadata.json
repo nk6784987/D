@@ -1,6 +1,7 @@
 {
-  "name": "",
-  "description": "",
+  "name": "NovaFlix",
+  "description": "Stream movies, web series, and live TV with ExoPlayer native playback.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
+

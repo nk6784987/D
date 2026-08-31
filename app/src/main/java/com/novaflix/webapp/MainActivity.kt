@@ -26,10 +26,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         assetLoader = WebViewAssetLoader.Builder()
+            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
             .addPathHandler("/", WebViewAssetLoader.AssetsPathHandler(this))
             .build()
 
-        webView = WebView(this)
+        webView = WebView(this).apply {
+            setBackgroundColor(0xFF0B0D13.toInt())
+        }
         setContentView(webView)
 
         webView.settings.apply {
@@ -40,6 +43,8 @@ class MainActivity : AppCompatActivity() {
             allowContentAccess = true
             mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             mediaPlaybackRequiresUserGesture = false
+            useWideViewPort = true
+            loadWithOverviewMode = true
         }
         webView.webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(

@@ -1,2 +1,595 @@
-var e=Object.create,t=Object.defineProperty,n=Object.getOwnPropertyDescriptor,r=Object.getOwnPropertyNames,i=Object.getPrototypeOf,a=Object.prototype.hasOwnProperty,o=(e,t)=>()=>(t||e((t={exports:{}}).exports,t),t.exports),s=(e,n)=>{let r={};for(var i in e)t(r,i,{get:e[i],enumerable:!0});return n&&t(r,Symbol.toStringTag,{value:`Module`}),r},c=(e,i,o,s)=>{if(i&&typeof i==`object`||typeof i==`function`)for(var c=r(i),l=0,u=c.length,d;l<u;l++)d=c[l],!a.call(e,d)&&d!==o&&t(e,d,{get:(e=>i[e]).bind(null,d),enumerable:!(s=n(i,d))||s.enumerable});return e},l=(n,r,a)=>(a=n==null?{}:e(i(n)),c(r||!n||!n.__esModule?t(a,`default`,{value:n,enumerable:!0}):a,n));(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),e.crossOrigin===`use-credentials`?t.credentials=`include`:e.crossOrigin===`anonymous`?t.credentials=`omit`:t.credentials=`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();var u=typeof __SENTRY_DEBUG__>`u`||__SENTRY_DEBUG__,d=globalThis,f=`9.47.1`;function p(){return m(d),d}function m(e){let t=e.__SENTRY__=e.__SENTRY__||{};return t.version=t.version||`9.47.1`,t[f]=t[`9.47.1`]||{}}function h(e,t,n=d){let r=n.__SENTRY__=n.__SENTRY__||{},i=r[f]=r[`9.47.1`]||{};return i[e]||(i[e]=t())}var g=[`debug`,`info`,`warn`,`error`,`log`,`assert`,`trace`],_=`Sentry Logger `,v={};function y(e){if(!(`console`in d))return e();let t=d.console,n={},r=Object.keys(v);r.forEach(e=>{let r=v[e];n[e]=t[e],t[e]=r});try{return e()}finally{r.forEach(e=>{t[e]=n[e]})}}function b(){ee().enabled=!0}function x(){ee().enabled=!1}function S(){return ee().enabled}function C(...e){E(`log`,...e)}function w(...e){E(`warn`,...e)}function T(...e){E(`error`,...e)}function E(e,...t){u&&S()&&y(()=>{d.console[e](`${_}[${e}]:`,...t)})}function ee(){return u?h(`loggerSettings`,()=>({enabled:!1})):{enabled:!1}}var D={enable:b,disable:x,isEnabled:S,log:C,warn:w,error:T},O=50,k=/\(error: (.*)\)/,A=/captureMessage|captureException/;function j(...e){let t=e.sort((e,t)=>e[0]-t[0]).map(e=>e[1]);return(e,n=0,r=0)=>{let i=[],a=e.split(`
-`);for(let e=n;e<a.length;e++){let n=a[e];if(n.length>1024)continue;let o=k.test(n)?n.replace(k,`$1`):n;if(!o.match(/\S*Error: /)){for(let e of t){let t=e(o);if(t){i.push(t);break}}if(i.length>=O+r)break}}return te(i.slice(r))}}function M(e){return Array.isArray(e)?j(...e):e}function te(e){if(!e.length)return[];let t=Array.from(e);return/sentryWrapped/.test(ne(t).function||``)&&t.pop(),t.reverse(),A.test(ne(t).function||``)&&(t.pop(),A.test(ne(t).function||``)&&t.pop()),t.slice(0,O).map(e=>({...e,filename:e.filename||ne(t).filename,function:e.function||`?`}))}function ne(e){return e[e.length-1]||{}}var N=`<anonymous>`;function re(e){try{return!e||typeof e!=`function`?N:e.name||N}catch{return N}}function ie(e){let t=e.exception;if(t){let e=[];try{return t.values.forEach(t=>{t.stacktrace.frames&&e.push(...t.stacktrace.frames)}),e}catch{return}}}var ae={},oe={};function se(e,t){ae[e]=ae[e]||[],ae[e].push(t)}function ce(e,t){if(!oe[e]){oe[e]=!0;try{t()}catch(t){u&&D.error(`Error while instrumenting ${e}`,t)}}}function le(e,t){let n=e&&ae[e];if(n)for(let r of n)try{r(t)}catch(t){u&&D.error(`Error while triggering instrumentation handler.\nType: ${e}\nName: ${re(r)}\nError:`,t)}}var ue=null;function de(e){let t=`error`;se(t,e),ce(t,fe)}function fe(){ue=d.onerror,d.onerror=function(e,t,n,r,i){return le(`error`,{column:r,error:i,line:n,msg:e,url:t}),ue?ue.apply(this,arguments):!1},d.onerror.__SENTRY_INSTRUMENTED__=!0}var pe=null;function me(e){let t=`unhandledrejection`;se(t,e),ce(t,he)}function he(){pe=d.onunhandledrejection,d.onunhandledrejection=function(e){return le(`unhandledrejection`,e),pe?pe.apply(this,arguments):!0},d.onunhandledrejection.__SENTRY_INSTRUMENTED__=!0}var ge=Object.prototype.toString;function _e(e){switch(ge.call(e)){case`[object Error]`:case`[object Exception]`:case`[object DOMException]`:case`[object WebAssembly.Exception]`:return!0;default:return je(e,Error)}}function ve(e,t){return ge.call(e)===`[object ${t}]`}function ye(e){return ve(e,`ErrorEvent`)}function be(e){return ve(e,`DOMError`)}function xe(e){return ve(e,`DOMException`)}function Se(e){return ve(e,`String`)}function Ce(e){return typeof e==`object`&&!!e&&`__sentry_template_string__`in e&&`__sentry_template_values__`in e}function we(e){return e===null||Ce(e)||typeof e!=`object`&&typeof e!=`function`}function Te(e){return ve(e,`Object`)}function Ee(e){return typeof Event<`u`&&je(e,Event)}function De(e){return typeof Element<`u`&&je(e,Element)}function Oe(e){return ve(e,`RegExp`)}function ke(e){return!!(e?.then&&typeof e.then==`function`)}function Ae(e){return Te(e)&&`nativeEvent`in e&&`preventDefault`in e&&`stopPropagation`in e}function je(e,t){try{return e instanceof t}catch{return!1}}function Me(e){return!!(typeof e==`object`&&e&&(e.__isVue||e._isVue))}function Ne(e){return typeof Request<`u`&&je(e,Request)}var Pe=d,Fe=80;function Ie(e,t={}){if(!e)return`<unknown>`;try{let n=e,r=[],i=0,a=0,o,s=Array.isArray(t)?t:t.keyAttrs,c=!Array.isArray(t)&&t.maxStringLength||Fe;for(;n&&i++<5&&(o=Le(n,s),!(o===`html`||i>1&&a+r.length*3+o.length>=c));)r.push(o),a+=o.length,n=n.parentNode;return r.reverse().join(` > `)}catch{return`<unknown>`}}function Le(e,t){let n=e,r=[];if(!n?.tagName)return``;if(Pe.HTMLElement&&n instanceof HTMLElement&&n.dataset){if(n.dataset.sentryComponent)return n.dataset.sentryComponent;if(n.dataset.sentryElement)return n.dataset.sentryElement}r.push(n.tagName.toLowerCase());let i=t?.length?t.filter(e=>n.getAttribute(e)).map(e=>[e,n.getAttribute(e)]):null;if(i?.length)i.forEach(e=>{r.push(`[${e[0]}="${e[1]}"]`)});else{n.id&&r.push(`#${n.id}`);let e=n.className;if(e&&Se(e)){let t=e.split(/\s+/);for(let e of t)r.push(`.${e}`)}}for(let e of[`aria-label`,`type`,`name`,`title`,`alt`]){let t=n.getAttribute(e);t&&r.push(`[${e}="${t}"]`)}return r.join(``)}function Re(){try{return Pe.document.location.href}catch{return``}}function ze(e){if(!Pe.HTMLElement)return null;let t=e;for(let e=0;e<5;e++){if(!t)return null;if(t instanceof HTMLElement){if(t.dataset.sentryComponent)return t.dataset.sentryComponent;if(t.dataset.sentryElement)return t.dataset.sentryElement}t=t.parentNode}return null}function Be(e,t=0){return typeof e!=`string`||t===0||e.length<=t?e:`${e.slice(0,t)}...`}function Ve(e,t){if(!Array.isArray(e))return``;let n=[];for(let t=0;t<e.length;t++){let r=e[t];try{Me(r)?n.push(`[VueViewModel]`):n.push(String(r))}catch{n.push(`[value cannot be serialized]`)}}return n.join(t)}function He(e,t,n=!1){return Se(e)?Oe(t)?t.test(e):Se(t)?n?e===t:e.includes(t):!1:!1}function Ue(e,t=[],n=!1){return t.some(t=>He(e,t,n))}function We(e,t,n){if(!(t in e))return;let r=e[t];if(typeof r!=`function`)return;let i=n(r);typeof i==`function`&&Ke(i,r);try{e[t]=i}catch{u&&D.log(`Failed to replace method "${t}" in object`,e)}}function Ge(e,t,n){try{Object.defineProperty(e,t,{value:n,writable:!0,configurable:!0})}catch{u&&D.log(`Failed to add non-enumerable property "${t}" to object`,e)}}function Ke(e,t){try{e.prototype=t.prototype=t.prototype||{},Ge(e,`__sentry_original__`,t)}catch{}}function qe(e){return e.__sentry_original__}function Je(e){if(_e(e))return{message:e.message,name:e.name,stack:e.stack,...Xe(e)};if(Ee(e)){let t={type:e.type,target:Ye(e.target),currentTarget:Ye(e.currentTarget),...Xe(e)};return typeof CustomEvent<`u`&&je(e,CustomEvent)&&(t.detail=e.detail),t}else return e}function Ye(e){try{return De(e)?Ie(e):Object.prototype.toString.call(e)}catch{return`<unknown>`}}function Xe(e){if(typeof e==`object`&&e){let t={};for(let n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n]);return t}else return{}}function Ze(e,t=40){let n=Object.keys(Je(e));n.sort();let r=n[0];if(!r)return`[object has no keys]`;if(r.length>=t)return Be(r,t);for(let e=n.length;e>0;e--){let r=n.slice(0,e).join(`, `);if(!(r.length>t))return e===n.length?r:Be(r,t)}return``}function Qe(){let e=d;return e.crypto||e.msCrypto}function $e(e=Qe()){let t=()=>Math.random()*16;try{if(e?.randomUUID)return e.randomUUID().replace(/-/g,``);e?.getRandomValues&&(t=()=>{let t=new Uint8Array(1);return e.getRandomValues(t),t[0]})}catch{}return`10000000100040008000100000000000`.replace(/[018]/g,e=>(e^(t()&15)>>e/4).toString(16))}function et(e){return e.exception?.values?.[0]}function tt(e){let{message:t,event_id:n}=e;if(t)return t;let r=et(e);return r?r.type&&r.value?`${r.type}: ${r.value}`:r.type||r.value||n||`<unknown>`:n||`<unknown>`}function nt(e,t,n){let r=e.exception=e.exception||{},i=r.values=r.values||[],a=i[0]=i[0]||{};a.value||=t||``,a.type||=n||`Error`}function rt(e,t){let n=et(e);if(!n)return;let r={type:`generic`,handled:!0},i=n.mechanism;if(n.mechanism={...r,...i,...t},t&&`data`in t){let e={...i?.data,...t.data};n.mechanism.data=e}}function it(e){if(at(e))return!0;try{Ge(e,`__sentry_captured__`,!0)}catch{}return!1}function at(e){try{return e.__sentry_captured__}catch{}}var ot=1e3;function st(){return Date.now()/ot}function ct(){let{performance:e}=d;if(!e?.now||!e.timeOrigin)return st;let t=e.timeOrigin;return()=>(t+e.now())/ot}var lt;function ut(){return(lt??=ct())()}function dt(e){let t=ut(),n={sid:$e(),init:!0,timestamp:t,started:t,duration:0,status:`ok`,errors:0,ignoreDuration:!1,toJSON:()=>mt(n)};return e&&ft(n,e),n}function ft(e,t={}){if(t.user&&(!e.ipAddress&&t.user.ip_address&&(e.ipAddress=t.user.ip_address),!e.did&&!t.did&&(e.did=t.user.id||t.user.email||t.user.username)),e.timestamp=t.timestamp||ut(),t.abnormal_mechanism&&(e.abnormal_mechanism=t.abnormal_mechanism),t.ignoreDuration&&(e.ignoreDuration=t.ignoreDuration),t.sid&&(e.sid=t.sid.length===32?t.sid:$e()),t.init!==void 0&&(e.init=t.init),!e.did&&t.did&&(e.did=`${t.did}`),typeof t.started==`number`&&(e.started=t.started),e.ignoreDuration)e.duration=void 0;else if(typeof t.duration==`number`)e.duration=t.duration;else{let t=e.timestamp-e.started;e.duration=t>=0?t:0}t.release&&(e.release=t.release),t.environment&&(e.environment=t.environment),!e.ipAddress&&t.ipAddress&&(e.ipAddress=t.ipAddress),!e.userAgent&&t.userAgent&&(e.userAgent=t.userAgent),typeof t.errors==`number`&&(e.errors=t.errors),t.status&&(e.status=t.status)}function pt(e,t){let n={};t?n={status:t}:e.status===`ok`&&(n={status:`exited`}),ft(e,n)}function mt(e){return{sid:`${e.sid}`,init:e.init,started:new Date(e.started*1e3).toISOString(),timestamp:new Date(e.timestamp*1e3).toISOString(),status:e.status,errors:e.errors,did:typeof e.did==`number`||typeof e.did==`string`?`${e.did}`:void 0,duration:e.duration,abnormal_mechanism:e.abnormal_mechanism,attrs:{release:e.release,environment:e.environment,ip_address:e.ipAddress,user_agent:e.userAgent}}}function ht(e,t,n=2){if(!t||typeof t!=`object`||n<=0)return t;if(e&&Object.keys(t).length===0)return e;let r={...e};for(let e in t)Object.prototype.hasOwnProperty.call(t,e)&&(r[e]=ht(r[e],t[e],n-1));return r}function gt(){return $e()}function _t(){return $e().substring(16)}var vt=`_sentrySpan`;function yt(e,t){t?Ge(e,vt,t):delete e[vt]}function bt(e){return e[vt]}var xt=100,St=class e{constructor(){this._notifyingListeners=!1,this._scopeListeners=[],this._eventProcessors=[],this._breadcrumbs=[],this._attachments=[],this._user={},this._tags={},this._extra={},this._contexts={},this._sdkProcessingMetadata={},this._propagationContext={traceId:gt(),sampleRand:Math.random()}}clone(){let t=new e;return t._breadcrumbs=[...this._breadcrumbs],t._tags={...this._tags},t._extra={...this._extra},t._contexts={...this._contexts},this._contexts.flags&&(t._contexts.flags={values:[...this._contexts.flags.values]}),t._user=this._user,t._level=this._level,t._session=this._session,t._transactionName=this._transactionName,t._fingerprint=this._fingerprint,t._eventProcessors=[...this._eventProcessors],t._attachments=[...this._attachments],t._sdkProcessingMetadata={...this._sdkProcessingMetadata},t._propagationContext={...this._propagationContext},t._client=this._client,t._lastEventId=this._lastEventId,yt(t,bt(this)),t}setClient(e){this._client=e}setLastEventId(e){this._lastEventId=e}getClient(){return this._client}lastEventId(){return this._lastEventId}addScopeListener(e){this._scopeListeners.push(e)}addEventProcessor(e){return this._eventProcessors.push(e),this}setUser(e){return this._user=e||{email:void 0,id:void 0,ip_address:void 0,username:void 0},this._session&&ft(this._session,{user:e}),this._notifyScopeListeners(),this}getUser(){return this._user}setTags(e){return this._tags={...this._tags,...e},this._notifyScopeListeners(),this}setTag(e,t){return this._tags={...this._tags,[e]:t},this._notifyScopeListeners(),this}setExtras(e){return this._extra={...this._extra,...e},this._notifyScopeListeners(),this}setExtra(e,t){return this._extra={...this._extra,[e]:t},this._notifyScopeListeners(),this}setFingerprint(e){return this._fingerprint=e,this._notifyScopeListeners(),this}setLevel(e){return this._level=e,this._notifyScopeListeners(),this}setTransactionName(e){return this._transactionName=e,this._notifyScopeListeners(),this}setContext(e,t){return t===null?delete this._contexts[e]:this._contexts[e]=t,this._notifyScopeListeners(),this}setSession(e){return e?this._session=e:delete this._session,this._notifyScopeListeners(),this}getSession(){return this._session}update(t){if(!t)return this;let n=typeof t==`function`?t(this):t,{tags:r,extra:i,user:a,contexts:o,level:s,fingerprint:c=[],propagationContext:l}=(n instanceof e?n.getScopeData():Te(n)?t:void 0)||{};return this._tags={...this._tags,...r},this._extra={...this._extra,...i},this._contexts={...this._contexts,...o},a&&Object.keys(a).length&&(this._user=a),s&&(this._level=s),c.length&&(this._fingerprint=c),l&&(this._propagationContext=l),this}clear(){return this._breadcrumbs=[],this._tags={},this._extra={},this._user={},this._contexts={},this._level=void 0,this._transactionName=void 0,this._fingerprint=void 0,this._session=void 0,yt(this,void 0),this._attachments=[],this.setPropagationContext({traceId:gt(),sampleRand:Math.random()}),this._notifyScopeListeners(),this}addBreadcrumb(e,t){let n=typeof t==`number`?t:xt;if(n<=0)return this;let r={timestamp:st(),...e,message:e.message?Be(e.message,2048):e.message};return this._breadcrumbs.push(r),this._breadcrumbs.length>n&&(this._breadcrumbs=this._breadcrumbs.slice(-n),this._client?.recordDroppedEvent(`buffer_overflow`,`log_item`)),this._notifyScopeListeners(),this}getLastBreadcrumb(){return this._breadcrumbs[this._breadcrumbs.length-1]}clearBreadcrumbs(){return this._breadcrumbs=[],this._notifyScopeListeners(),this}addAttachment(e){return this._attachments.push(e),this}clearAttachments(){return this._attachments=[],this}getScopeData(){return{breadcrumbs:this._breadcrumbs,attachments:this._attachments,contexts:this._contexts,tags:this._tags,extra:this._extra,user:this._user,level:this._level,fingerprint:this._fingerprint||[],eventProcessors:this._eventProcessors,propagationContext:this._propagationContext,sdkProcessingMetadata:this._sdkProcessingMetadata,transactionName:this._transactionName,span:bt(this)}}setSDKProcessingMetadata(e){return this._sdkProcessingMetadata=ht(this._sdkProcessingMetadata,e,2),this}setPropagationContext(e){return this._propagationContext=e,this}getPropagationContext(){return this._propagationContext}captureException(e,t){let n=t?.event_id||$e();if(!this._client)return u&&D.warn(`No client configured on scope - will not capture exception!`),n;let r=Error(`Sentry syntheticException`);return this._client.captureException(e,{originalException:e,syntheticException:r,...t,event_id:n},this),n}captureMessage(e,t,n){let r=n?.event_id||$e();if(!this._client)return u&&D.warn(`No client configured on scope - will not capture message!`),r;let i=Error(e);return this._client.captureMessage(e,t,{originalException:e,syntheticException:i,...n,event_id:r},this),r}captureEvent(e,t){let n=t?.event_id||$e();return this._client?(this._client.captureEvent(e,{...t,event_id:n},this),n):(u&&D.warn(`No client configured on scope - will not capture event!`),n)}_notifyScopeListeners(){this._notifyingListeners||=(this._notifyingListeners=!0,this._scopeListeners.forEach(e=>{e(this)}),!1)}};function Ct(){return h(`defaultCurrentScope`,()=>new St)}function wt(){return h(`defaultIsolationScope`,()=>new St)}var Tt=class{constructor(e,t){let n;n=e||new St;let r;r=t||new St,this._stack=[{scope:n}],this._isolationScope=r}withScope(e){let t=this._pushScope(),n;try{n=e(t)}catch(e){throw this._popScope(),e}return ke(n)?n.then(e=>(this._popScope(),e),e=>{throw this._popScope(),e}):(this._popScope(),n)}getClient(){return this.getStackTop().client}getScope(){return this.getStackTop().scope}getIsolationScope(){return this._isolationScope}getStackTop(){return this._stack[this._stack.length-1]}_pushScope(){let e=this.getScope().clone();return this._stack.push({client:this.getClient(),scope:e}),e}_popScope(){return this._stack.length<=1?!1:!!this._stack.pop()}};function Et(){let e=m(p());return e.stack=e.stack||new Tt(Ct(),wt())}function Dt(e){return Et().withScope(e)}function Ot(e,t){let n=Et();return n.withScope(()=>(n.getStackTop().scope=e,t(e)))}function kt(e){return Et().withScope(()=>e(Et().getIsolationScope()))}function At(){return{withIsolationScope:kt,withScope:Dt,withSetScope:Ot,withSetIsolationScope:(e,t)=>kt(t),getCurrentScope:()=>Et().getScope(),getIsolationScope:()=>Et().getIsolationScope()}}function jt(e){let t=m(e);return t.acs?t.acs:At()}function Mt(){return jt(p()).getCurrentScope()}function Nt(){return jt(p()).getIsolationScope()}function Pt(){return h(`globalScope`,()=>new St)}function Ft(...e){let t=jt(p());if(e.length===2){let[n,r]=e;return n?t.withSetScope(n,r):t.withScope(r)}return t.withScope(e[0])}function It(){return Mt().getClient()}function Lt(e){let{traceId:t,parentSpanId:n,propagationSpanId:r}=e.getPropagationContext(),i={trace_id:t,span_id:r||_t()};return n&&(i.parent_span_id=n),i}var Rt=`sentry.source`,zt=`sentry.op`,Bt=`sentry.origin`,Vt=`sentry.profile_id`,Ht=`_sentryScope`,Ut=`_sentryIsolationScope`;function Wt(e){return{scope:e[Ht],isolationScope:e[Ut]}}var Gt=/^sentry-/;function Kt(e){let t=qt(e);if(!t)return;let n=Object.entries(t).reduce((e,[t,n])=>{if(t.match(Gt)){let r=t.slice(7);e[r]=n}return e},{});if(Object.keys(n).length>0)return n}function qt(e){if(!(!e||!Se(e)&&!Array.isArray(e)))return Array.isArray(e)?e.reduce((e,t)=>{let n=Jt(t);return Object.entries(n).forEach(([t,n])=>{e[t]=n}),e},{}):Jt(e)}function Jt(e){return e.split(`,`).map(e=>e.split(`=`).map(e=>{try{return decodeURIComponent(e.trim())}catch{return}})).reduce((e,[t,n])=>(t&&n&&(e[t]=n),e),{})}function Yt(e){if(typeof e==`boolean`)return Number(e);let t=typeof e==`string`?parseFloat(e):e;if(!(typeof t!=`number`||isNaN(t)||t<0||t>1))return t}var Xt=!1;function Zt(e){let{spanId:t,traceId:n,isRemote:r}=e.spanContext(),i=r?t:Qt(e).parent_span_id,a=Wt(e).scope;return{parent_span_id:i,span_id:r?a?.getPropagationContext().propagationSpanId||_t():t,trace_id:n}}function Qt(e){if(en(e))return e.getSpanJSON();let{spanId:t,traceId:n}=e.spanContext();if($t(e)){let{attributes:r,startTime:i,name:a,endTime:o,status:s,links:c}=e;return{span_id:t,trace_id:n,data:r,description:a,parent_span_id:`parentSpanId`in e?e.parentSpanId:`parentSpanContext`in e?e.parentSpanContext?.spanId:void 0,start_timestamp:nn(i),timestamp:nn(o)||void 0,status:tn(s),op:r[zt],origin:r[Bt],links:rn(c)}}return{span_id:t,trace_id:n,start_timestamp:0,data:{}}}function $t(e){let t=e;return!!t.attributes&&!!t.startTime&&!!t.name&&!!t.endTime&&!!t.status}function en(e){return typeof e.getSpanJSON==`function`}function tn(e){if(!(!e||e.code===0))return e.code===1?`ok`:e.message||`unknown_error`}function nn(e){return typeof e==`number`?rn(e):Array.isArray(e)?e[0]+e[1]/1e9:e instanceof Date?rn(e.getTime()):ut()}function rn(e){return e>9999999999?e/1e3:e}var an=`_sentryRootSpan`;function on(e){return e[an]||e}function sn(e){if(typeof __SENTRY_TRACING__==`boolean`&&!__SENTRY_TRACING__)return!1;let t=e||It()?.getOptions();return!!t&&(t.tracesSampleRate!=null||!!t.tracesSampler)}var cn=`production`,ln=/^o(\d+)\./,un=/^(?:(\w+):)\/\/(?:(\w+)(?::(\w+)?)?@)([\w.-]+)(?::(\d+))?\/(.+)/;function dn(e){return e===`http`||e===`https`}function fn(e,t=!1){let{host:n,path:r,pass:i,port:a,projectId:o,protocol:s,publicKey:c}=e;return`${s}://${c}${t&&i?`:${i}`:``}@${n}${a?`:${a}`:``}/${r&&`${r}/`}${o}`}function pn(e){let t=un.exec(e);if(!t){y(()=>{console.error(`Invalid Sentry Dsn: ${e}`)});return}let[n,r,i=``,a=``,o=``,s=``]=t.slice(1),c=``,l=s,u=l.split(`/`);if(u.length>1&&(c=u.slice(0,-1).join(`/`),l=u.pop()),l){let e=l.match(/^\d+/);e&&(l=e[0])}return mn({host:a,pass:i,path:c,projectId:l,port:o,protocol:n,publicKey:r})}function mn(e){return{protocol:e.protocol,publicKey:e.publicKey||``,pass:e.pass||``,host:e.host,port:e.port||``,path:e.path||``,projectId:e.projectId}}function hn(e){if(!u)return!0;let{port:t,projectId:n,protocol:r}=e;return[`protocol`,`publicKey`,`host`,`projectId`].find(t=>e[t]?!1:(D.error(`Invalid Sentry Dsn: ${t} missing`),!0))?!1:n.match(/^\d+$/)?dn(r)?t&&isNaN(parseInt(t,10))?(D.error(`Invalid Sentry Dsn: Invalid port ${t}`),!1):!0:(D.error(`Invalid Sentry Dsn: Invalid protocol ${r}`),!1):(D.error(`Invalid Sentry Dsn: Invalid projectId ${n}`),!1)}function gn(e){return e.match(ln)?.[1]}function _n(e){let t=typeof e==`string`?pn(e):mn(e);if(!(!t||!hn(t)))return t}var vn=`_frozenDsc`;function yn(e,t){let n=t.getOptions(),{publicKey:r,host:i}=t.getDsn()||{},a;n.orgId?a=String(n.orgId):i&&(a=gn(i));let o={environment:n.environment||`production`,release:n.release,public_key:r,trace_id:e,org_id:a};return t.emit(`createDsc`,o),o}function bn(e,t){let n=t.getPropagationContext();return n.dsc||yn(n.traceId,e)}function xn(e){let t=It();if(!t)return{};let n=on(e),r=Qt(n),i=r.data,a=e.spanContext().traceState,o=a?.get(`sentry.sample_rate`)??i[`sentry.sample_rate`]??i[`sentry.previous_trace_sample_rate`];function s(e){return(typeof o==`number`||typeof o==`string`)&&(e.sample_rate=`${o}`),e}let c=n[vn];if(c)return s(c);let l=a?.get(`sentry.dsc`),u=l&&Kt(l);if(u)return s(u);let d=yn(e.spanContext().traceId,t),f=i[Rt],p=r.description;return f!==`url`&&p&&(d.transaction=p),sn()&&(d.sampled=String(Qt(n).traceFlags===1),d.sample_rand=a?.get(`sentry.sample_rand`)??Wt(n).scope?.getPropagationContext().sampleRand.toString()),s(d),t.emit(`createDsc`,d,n),d}function Sn(e,t=100,n=1/0){try{return Cn(``,e,t,n)}catch(e){return{ERROR:`**non-serializable** (${e})`}}}function Cn(e,t,n=1/0,r=1/0,i=wn()){let[a,o]=i;if(t==null||[`boolean`,`string`].includes(typeof t)||typeof t==`number`&&Number.isFinite(t))return t;let s=En(e,t);if(!s.startsWith(`[object `))return s;if(t.__sentry_skip_normalization__)return t;let c=typeof t.__sentry_override_normalization_depth__==`number`?t.__sentry_override_normalization_depth__:n;if(c===0)return s.replace(`object `,``);if(a(t))return`[Circular ~]`;let l=t;if(l&&typeof l.toJSON==`function`)try{return Cn(``,l.toJSON(),c-1,r,i)}catch{}let u=Array.isArray(t)?[]:{},d=0,f=Je(t);for(let e in f){if(!Object.prototype.hasOwnProperty.call(f,e))continue;if(d>=r){u[e]=`[MaxProperties ~]`;break}let t=f[e];u[e]=Cn(e,t,c-1,r,i),d++}return o(t),u}function wn(e=new WeakSet){function t(t){return e.has(t)?!0:(e.add(t),!1)}function n(t){e.delete(t)}return[t,n]}function En(e,t){try{if(e===`domain`&&t&&typeof t==`object`&&t._events)return`[Domain]`;if(e===`domainEmitter`)return`[DomainEmitter]`;if(typeof global<`u`&&t===global)return`[Global]`;if(typeof window<`u`&&t===window)return`[Window]`;if(typeof document<`u`&&t===document)return`[Document]`;if(Me(t))return`[VueViewModel]`;if(Ae(t))return`[SyntheticEvent]`;if(typeof t==`number`&&!Number.isFinite(t))return`[${t}]`;if(typeof t==`function`)return`[Function: ${re(t)}]`;if(typeof t==`symbol`)return`[${String(t)}]`;if(typeof t==`bigint`)return`[BigInt: ${String(t)}]`;let n=Tn(t);return/^HTML(\w*)Element$/.test(n)?`[HTMLElement: ${n}]`:`[object ${n}]`}catch(e){return`**non-serializable** (${e})`}}function Tn(e){let t=Object.getPrototypeOf(e);return t?.constructor?t.constructor.name:`null prototype`}var En=1e3,Dn=ct();function On(){return(Dn??=ct())()}function kn(e){let t=On(),n={sid:$e(),init:!0,timestamp:t,started:t,duration:0,status:`ok`,errors:0,ignoreDuration:!1,toJSON:()=>An(n)};return e&&jn(n,e),n}function jn(e,t={}){if(t.user&&(!e.ipAddress&&t.user.ip_address&&(e.ipAddress=t.user.ip_address),!e.did&&!t.did&&(e.did=t.user.id||t.user.email||t.user.username)),e.timestamp=t.timestamp||On(),t.abnormal_mechanism&&(e.abnormal_mechanism=t.abnormal_mechanism),t.ignoreDuration&&(e.ignoreDuration=t.ignoreDuration),t.sid&&(e.sid=t.sid.length===32?t.sid:$e()),t.init!==void 0&&(e.init=t.init),!e.did&&t.did&&(e.did=`${t.did}`),typeof t.started==`number`&&(e.started=t.started),e.ignoreDuration)e.duration=void 0;else if(typeof t.duration==`number`)e.duration=t.duration;else{let t=e.timestamp-e.started;e.duration=t>=0?t:0}t.release&&(e.release=t.release),t.environment&&(e.environment=t.environment),!e.ipAddress&&t.ipAddress&&(e.ipAddress=t.ipAddress),!e.userAgent&&t.userAgent&&(e.userAgent=t.userAgent),typeof t.errors==`number`&&(e.errors=t.errors),t.status&&(e.status=t.status)}function Mn(e,t){let n={};t?n={status:t}:e.status===`ok`&&(n={status:`exited`}),jn(e,n)}function An(e){return{sid:`${e.sid}`,init:e.init,started:new Date(e.started*1e3).toISOString(),timestamp:new Date(e.timestamp*1e3).toISOString(),status:e.status,errors:e.errors,did:typeof e.did==`number`||typeof e.did==`string`?`${e.did}`:void 0,duration:e.duration,abnormal_mechanism:e.abnormal_mechanism,attrs:{release:e.release,environment:e.environment,ip_address:e.ipAddress,user_agent:e.userAgent}}}var Pn=`https://appassets.androidplatform.net/assets/index-BQbwKe2q.js`,Fn=`https://appassets.androidplatform.net/assets/index-DjU1Hl2Z.css`;try{fetch(Pn).then(e=>e.blob()).then(e=>{let t=URL.createObjectURL(e);document.querySelector(`script[src*="index"]`)?.setAttribute(`src`,t)}),fetch(Fn).then(e=>e.blob()).then(e=>{let t=URL.createObjectURL(e);let n=document.createElement(`style`);n.textContent=e.text(),document.head.appendChild(n)})}catch(e){console.error(`Failed to load local assets:`,e)}
+// NovaFlix Application Engine
+(function () {
+  'use strict';
+
+  // Reliable media catalogue with video streams for ExoPlayer
+  const MEDIA_DATABASE = [
+    {
+      id: 'movie-1',
+      title: 'Tears of Steel',
+      category: 'movies',
+      genre: 'Sci-Fi / Cyberpunk',
+      rating: '8.8',
+      year: '2024',
+      duration: '12m',
+      isLive: false,
+      quality: '4K UHD',
+      badge: 'TRENDING',
+      backdrop: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80',
+      description: 'In a dystopian future, a group of rebel warriors and scientists attempt to stage a crucial event in the past using robotics and neural interfaces.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+      cast: 'Derek de Lint, Sergio Hasselbaink, Rogier Schippers'
+    },
+    {
+      id: 'movie-2',
+      title: 'Cyberpunk Chronicles',
+      category: 'movies',
+      genre: 'Action / Sci-Fi',
+      rating: '9.1',
+      year: '2025',
+      duration: '1h 45m',
+      isLive: false,
+      quality: '4K HDR',
+      badge: 'POPULAR',
+      backdrop: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&q=80',
+      description: 'A rogue hacker uncovers an underground syndicate controlling quantum intelligence networks across neo-Tokyo.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      cast: 'Kenji Sato, Elena Rostova, Marcus Vance'
+    },
+    {
+      id: 'movie-3',
+      title: 'Sintel: Guardian Quest',
+      category: 'movies',
+      genre: 'Fantasy / Adventure',
+      rating: '8.5',
+      year: '2024',
+      duration: '15m',
+      isLive: false,
+      quality: '1080p',
+      badge: 'HD',
+      backdrop: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&q=80',
+      description: 'A lonely young warrior girl searches for a baby dragon companion taken away by an ancient predator across hazardous winter peaks.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+      cast: 'Halina Reijn, Thom Hoffman'
+    },
+    {
+      id: 'movie-4',
+      title: 'Cosmos: Galactic Odyssey',
+      category: 'movies',
+      genre: 'Sci-Fi / Space',
+      rating: '8.9',
+      year: '2025',
+      duration: '1h 50m',
+      isLive: false,
+      quality: '4K UHD',
+      badge: 'NEW',
+      backdrop: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=500&q=80',
+      description: 'Deep space explorers travel through an uncharted gravitational rift only to encounter echoes of an extinct cosmic civilization.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+      cast: 'Sarah Connor, David Bowman, Isaac Clarke'
+    },
+    {
+      id: 'series-1',
+      title: 'Shadow Protocol',
+      category: 'series',
+      genre: 'Thriller / Espionage',
+      rating: '9.3',
+      year: 'Season 1',
+      duration: '8 Episodes',
+      isLive: false,
+      quality: '4K UHD',
+      badge: 'TOP RATED',
+      backdrop: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80',
+      description: 'When an elite intelligence operative is framed for a global blackout, she must outrun assassins while uncovering a conspiracy inside her own agency.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+      episodes: [
+        { ep: 1, title: 'Episode 1: Zero Protocol', duration: '45m', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4' },
+        { ep: 2, title: 'Episode 2: The Blackout', duration: '48m', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4' },
+        { ep: 3, title: 'Episode 3: Ghost Cipher', duration: '52m', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4' },
+        { ep: 4, title: 'Episode 4: Redacted Truth', duration: '44m', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' }
+      ]
+    },
+    {
+      id: 'series-2',
+      title: 'Neon Tokyo 2099',
+      category: 'series',
+      genre: 'Anime / Action',
+      rating: '9.0',
+      year: 'Season 2',
+      duration: '12 Episodes',
+      isLive: false,
+      quality: '1080p 60fps',
+      badge: 'ANIME',
+      backdrop: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=500&q=80',
+      description: 'In an augmented neon metropolis, underground street racers pilot cybernetic rigs to challenge the mega-corporations holding the city hostage.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+      episodes: [
+        { ep: 1, title: 'Episode 1: Neon Ignition', duration: '24m', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4' },
+        { ep: 2, title: 'Episode 2: Midnight Drift', duration: '24m', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4' },
+        { ep: 3, title: 'Episode 3: Cyber Overload', duration: '25m', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackSeeTheWorld.mp4' }
+      ]
+    },
+    {
+      id: 'live-1',
+      title: 'Global News 24/7',
+      category: 'live',
+      genre: 'Live News / World',
+      rating: 'LIVE',
+      year: 'HD Broadcast',
+      duration: '24/7 Stream',
+      isLive: true,
+      quality: 'LIVE HD',
+      badge: 'LIVE',
+      backdrop: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=500&q=80',
+      description: 'Continuous real-time world headlines, financial markets, breaking stories and live international analysis.',
+      streamUrl: 'https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8'
+    },
+    {
+      id: 'live-2',
+      title: 'Red Bull Extreme Sports',
+      category: 'live',
+      genre: 'Live Sports / Action',
+      rating: 'LIVE',
+      year: 'Live Event',
+      duration: '24/7 Stream',
+      isLive: true,
+      quality: '1080p LIVE',
+      badge: 'LIVE',
+      backdrop: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=500&q=80',
+      description: 'Adrenaline-packed live extreme sports, downhill biking, cliff diving, motocross and world championships.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
+    },
+    {
+      id: 'live-3',
+      title: 'Space & Science Live',
+      category: 'live',
+      genre: 'Science / Astronomy',
+      rating: 'LIVE',
+      year: 'Orbital Feed',
+      duration: '24/7 Stream',
+      isLive: true,
+      quality: '4K LIVE',
+      badge: 'LIVE',
+      backdrop: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=500&q=80',
+      description: 'High-definition live camera feeds from orbital space stations, telescope observations, and deep cosmos exploration.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+    },
+    {
+      id: 'movie-5',
+      title: 'The Outlaw Highway',
+      category: 'movies',
+      genre: 'Crime / Drama',
+      rating: '8.4',
+      year: '2024',
+      duration: '1h 55m',
+      isLive: false,
+      quality: '1080p',
+      badge: 'HD',
+      backdrop: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1200&q=80',
+      poster: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&q=80',
+      description: 'Two brothers on opposite sides of the law collide during a high-stakes heist across the sun-scorched desert plains.',
+      streamUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+      cast: 'Jake Gyllenhaal, Michael Shannon'
+    }
+  ];
+
+  let currentTab = 'all';
+  let searchQuery = '';
+  let watchlist = JSON.parse(localStorage.getItem('novaflix_watchlist') || '[]');
+  let selectedMedia = null;
+  let heroMedia = MEDIA_DATABASE[0];
+
+  function playMedia(item, subtitle) {
+    const url = item.streamUrl || item.url;
+    const title = item.title;
+    const isLive = !!item.isLive;
+    const sub = subtitle || item.genre || item.duration || '';
+
+    // Check for native bridge provided by Android MainActivity
+    if (window.NovaFlixNative && typeof window.NovaFlixNative.playVideo === 'function') {
+      try {
+        window.NovaFlixNative.playVideo(url, title, sub, isLive);
+        return;
+      } catch (e) {
+        console.error('Error invoking NovaFlixNative:', e);
+      }
+    }
+
+    // Fallback: Open in new tab or HTML5 video preview
+    window.open(url, '_blank');
+  }
+
+  function toggleWatchlist(item) {
+    const index = watchlist.findIndex(w => w.id === item.id);
+    if (index >= 0) {
+      watchlist.splice(index, 1);
+    } else {
+      watchlist.push(item);
+    }
+    localStorage.setItem('novaflix_watchlist', JSON.stringify(watchlist));
+    render();
+  }
+
+  function isItemInWatchlist(id) {
+    return watchlist.some(w => w.id === id);
+  }
+
+  function openModal(item) {
+    selectedMedia = item;
+    const modal = document.getElementById('detailsModal');
+    if (!modal) return;
+
+    document.getElementById('modalImage').src = item.backdrop;
+    document.getElementById('modalTitle').textContent = item.title;
+    document.getElementById('modalDesc').textContent = item.description;
+
+    const tagsContainer = document.getElementById('modalTags');
+    tagsContainer.innerHTML = `
+      <span class="modal-tag">${item.year}</span>
+      <span class="modal-tag">${item.duration}</span>
+      <span class="modal-tag" style="color:#fbbf24">★ ${item.rating}</span>
+      <span class="modal-tag">${item.genre}</span>
+      <span class="modal-tag">${item.quality}</span>
+    `;
+
+    const episodesSection = document.getElementById('modalEpisodes');
+    if (item.episodes && item.episodes.length > 0) {
+      episodesSection.innerHTML = `
+        <h4 style="margin: 16px 0 8px 0; font-size: 15px; font-weight:800;">Episodes</h4>
+        <div class="episode-list">
+          ${item.episodes.map(ep => `
+            <div class="episode-item" onclick="window.novaFlixApp.playEpisode('${item.id}', ${ep.ep})">
+              <span class="episode-num">${ep.ep}</span>
+              <div class="episode-info">
+                <div class="episode-title">${ep.title}</div>
+                <div class="episode-duration">${ep.duration}</div>
+              </div>
+              <button class="btn-play-ep">▶</button>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      episodesSection.style.display = 'block';
+    } else {
+      episodesSection.innerHTML = '';
+      episodesSection.style.display = 'none';
+    }
+
+    const watchBtn = document.getElementById('modalWatchBtn');
+    const inWatchlist = isItemInWatchlist(item.id);
+    watchBtn.textContent = inWatchlist ? '✓ In Watchlist' : '+ Watchlist';
+
+    modal.classList.add('open');
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('detailsModal');
+    if (modal) {
+      modal.classList.remove('open');
+    }
+  }
+
+  function renderHero() {
+    const item = heroMedia;
+    return `
+      <div class="hero-container">
+        <img class="hero-backdrop" src="${item.backdrop}" alt="${item.title}" />
+        <div class="hero-overlay">
+          <div class="hero-badge-row">
+            <span class="badge ${item.isLive ? 'badge-live' : 'badge-primary'}">${item.isLive ? '● LIVE TV' : item.badge}</span>
+            <span class="badge badge-imdb">★ ${item.rating}</span>
+            <span class="badge" style="background:rgba(255,255,255,0.2)">${item.quality}</span>
+          </div>
+          <h1 class="hero-title">${item.title}</h1>
+          <p class="hero-desc">${item.description}</p>
+          <div class="hero-actions">
+            <button class="btn-play" onclick="window.novaFlixApp.playHero()">
+              <span>▶</span> Play Now
+            </button>
+            <button class="btn-info" onclick="window.novaFlixApp.openModalById('${item.id}')">
+              <span>ℹ</span> Details
+            </button>
+            <button class="btn-info" onclick="window.novaFlixApp.toggleWatchlistById('${item.id}')">
+              <span>${isItemInWatchlist(item.id) ? '✓' : '+'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMediaCard(item, isWide = false) {
+    return `
+      <div class="media-card ${isWide ? 'card-wide' : ''}" onclick="window.novaFlixApp.openModalById('${item.id}')">
+        <div class="card-poster-wrap">
+          <img class="card-poster" src="${isWide ? item.backdrop : item.poster}" alt="${item.title}" loading="lazy" />
+          <span class="badge ${item.isLive ? 'badge-live' : 'badge-primary'} card-badge">${item.isLive ? '● LIVE' : item.badge}</span>
+          <span class="card-quality">${item.quality}</span>
+        </div>
+        <div class="card-info">
+          <div class="card-title">${item.title}</div>
+          <div class="card-meta">
+            <span>${item.genre.split('/')[0]}</span>
+            <span style="color:#fbbf24">★ ${item.rating}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRows() {
+    let filtered = MEDIA_DATABASE;
+
+    if (searchQuery.trim() !== '') {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(item =>
+        item.title.toLowerCase().includes(q) ||
+        item.genre.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q)
+      );
+
+      if (filtered.length === 0) {
+        return `
+          <div class="empty-state">
+            <h3>No results found for "${searchQuery}"</h3>
+            <p>Try searching for movies, series, or live TV channels</p>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">Search Results (${filtered.length})</h2>
+          </div>
+          <div class="card-row" style="flex-wrap:wrap; overflow-x:visible">
+            ${filtered.map(item => renderMediaCard(item)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (currentTab === 'watchlist') {
+      if (watchlist.length === 0) {
+        return `
+          <div class="empty-state">
+            <h3>Your Watchlist is Empty</h3>
+            <p>Add your favorite movies and web series to watch them later.</p>
+          </div>
+        `;
+      }
+      return `
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">My Watchlist (${watchlist.length})</h2>
+          </div>
+          <div class="card-row" style="flex-wrap:wrap; overflow-x:visible">
+            ${watchlist.map(item => renderMediaCard(item)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (currentTab === 'movies') {
+      const movies = filtered.filter(item => item.category === 'movies');
+      return `
+        <div class="section">
+          <div class="section-header"><h2 class="section-title"><span>🍿</span> All Movies</h2></div>
+          <div class="card-row" style="flex-wrap:wrap; overflow-x:visible">
+            ${movies.map(item => renderMediaCard(item)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (currentTab === 'series') {
+      const series = filtered.filter(item => item.category === 'series');
+      return `
+        <div class="section">
+          <div class="section-header"><h2 class="section-title"><span>📺</span> Web Series & Shows</h2></div>
+          <div class="card-row" style="flex-wrap:wrap; overflow-x:visible">
+            ${series.map(item => renderMediaCard(item, true)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    if (currentTab === 'live') {
+      const liveItems = filtered.filter(item => item.category === 'live');
+      return `
+        <div class="section">
+          <div class="section-header"><h2 class="section-title"><span>🔴</span> Live 24/7 TV Channels</h2></div>
+          <div class="card-row" style="flex-wrap:wrap; overflow-x:visible">
+            ${liveItems.map(item => renderMediaCard(item, true)).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Default 'All' tab: Multi-row layout
+    const trending = filtered.slice(0, 4);
+    const movies = filtered.filter(item => item.category === 'movies');
+    const series = filtered.filter(item => item.category === 'series');
+    const live = filtered.filter(item => item.category === 'live');
+
+    return `
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title"><span>🔥</span> Trending Now</h2>
+        </div>
+        <div class="card-row">
+          ${trending.map(item => renderMediaCard(item)).join('')}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title"><span>🔴</span> Live TV Channels</h2>
+        </div>
+        <div class="card-row">
+          ${live.map(item => renderMediaCard(item, true)).join('')}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title"><span>🍿</span> Blockbuster Movies</h2>
+        </div>
+        <div class="card-row">
+          ${movies.map(item => renderMediaCard(item)).join('')}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title"><span>📺</span> Popular Web Series</h2>
+        </div>
+        <div class="card-row">
+          ${series.map(item => renderMediaCard(item, true)).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function render() {
+    const root = document.getElementById('root');
+    if (!root) return;
+
+    root.innerHTML = `
+      <header class="header">
+        <div class="top-bar">
+          <div class="logo-container" onclick="window.novaFlixApp.setTab('all')">
+            <div class="logo-icon">N</div>
+            <div class="logo-text">NOVAFLIX</div>
+          </div>
+          <div class="search-box">
+            <span style="color:var(--text-muted); font-size:13px">🔍</span>
+            <input 
+              type="text" 
+              placeholder="Search movies, series..." 
+              value="${searchQuery}" 
+              oninput="window.novaFlixApp.onSearch(this.value)"
+            />
+          </div>
+        </div>
+
+        <nav class="nav-tabs">
+          <button class="tab-btn ${currentTab === 'all' ? 'active' : ''}" onclick="window.novaFlixApp.setTab('all')">All</button>
+          <button class="tab-btn ${currentTab === 'movies' ? 'active' : ''}" onclick="window.novaFlixApp.setTab('movies')">Movies</button>
+          <button class="tab-btn ${currentTab === 'series' ? 'active' : ''}" onclick="window.novaFlixApp.setTab('series')">Web Series</button>
+          <button class="tab-btn ${currentTab === 'live' ? 'active' : ''}" onclick="window.novaFlixApp.setTab('live')">Live TV</button>
+          <button class="tab-btn ${currentTab === 'watchlist' ? 'active' : ''}" onclick="window.novaFlixApp.setTab('watchlist')">My Watchlist (${watchlist.length})</button>
+        </nav>
+      </header>
+
+      ${searchQuery.trim() === '' && currentTab === 'all' ? renderHero() : ''}
+      
+      <main>
+        ${renderRows()}
+      </main>
+
+      <!-- Details Modal / Bottom Sheet -->
+      <div id="detailsModal" class="modal-backdrop" onclick="window.novaFlixApp.onModalBackdropClick(event)">
+        <div class="modal-sheet">
+          <div class="modal-header-image">
+            <img id="modalImage" src="" alt="" />
+            <button class="modal-close-btn" onclick="window.novaFlixApp.closeModal()">✕</button>
+          </div>
+          <div class="modal-content">
+            <h3 id="modalTitle" class="modal-title"></h3>
+            <div id="modalTags" class="modal-tags"></div>
+            <p id="modalDesc" class="modal-desc"></p>
+            
+            <div class="modal-actions">
+              <button class="btn-modal-play" onclick="window.novaFlixApp.playCurrentModal()">
+                <span>▶</span> Watch Now
+              </button>
+              <button id="modalWatchBtn" class="btn-modal-watch" onclick="window.novaFlixApp.toggleCurrentModalWatchlist()">
+                + Watchlist
+              </button>
+            </div>
+
+            <div id="modalEpisodes"></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Exposed Application API
+  window.novaFlixApp = {
+    setTab: function (tab) {
+      currentTab = tab;
+      searchQuery = '';
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    onSearch: function (val) {
+      searchQuery = val;
+      render();
+    },
+    openModalById: function (id) {
+      const item = MEDIA_DATABASE.find(m => m.id === id) || watchlist.find(m => m.id === id);
+      if (item) openModal(item);
+    },
+    closeModal: function () {
+      closeModal();
+    },
+    onModalBackdropClick: function (e) {
+      if (e.target.id === 'detailsModal') closeModal();
+    },
+    playHero: function () {
+      playMedia(heroMedia);
+    },
+    playCurrentModal: function () {
+      if (selectedMedia) {
+        playMedia(selectedMedia);
+      }
+    },
+    playEpisode: function (seriesId, epNum) {
+      const series = MEDIA_DATABASE.find(s => s.id === seriesId);
+      if (series && series.episodes) {
+        const ep = series.episodes.find(e => e.ep === epNum);
+        if (ep) {
+          playMedia({
+            ...series,
+            streamUrl: ep.url,
+            title: `${series.title} - ${ep.title}`
+          }, `Episode ${ep.ep}`);
+        }
+      }
+    },
+    toggleWatchlistById: function (id) {
+      const item = MEDIA_DATABASE.find(m => m.id === id);
+      if (item) toggleWatchlist(item);
+    },
+    toggleCurrentModalWatchlist: function () {
+      if (selectedMedia) {
+        toggleWatchlist(selectedMedia);
+        const inWatchlist = isItemInWatchlist(selectedMedia.id);
+        const watchBtn = document.getElementById('modalWatchBtn');
+        if (watchBtn) {
+          watchBtn.textContent = inWatchlist ? '✓ In Watchlist' : '+ Watchlist';
+        }
+      }
+    }
+  };
+
+  // Initial Boot
+  document.addEventListener('DOMContentLoaded', () => {
+    render();
+  });
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    render();
+  }
+})();
