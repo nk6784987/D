@@ -34,15 +34,16 @@ jobs:
       - name: Prepare build environment
         run: |
           if [ -f debug.keystore.base64 ]; then
-            base64 -d debug.keystore.base64 > debug.keystore || base64 --decode debug.keystore.base64 > debug.keystore || true
+            base64 -d debug.keystore.base64 > debug.keystore 2>/dev/null || base64 --decode debug.keystore.base64 > debug.keystore 2>/dev/null || true
           fi
           touch .env
           touch .env.example
           sed -i 's/org.gradle.configuration-cache=true/org.gradle.configuration-cache=false/g' gradle.properties || true
           sed -i 's/org.gradle.caching=true/org.gradle.caching=false/g' gradle.properties || true
+          sed -i '/kotlin.compiler.execution.strategy=in-process/d' gradle.properties || true
 
       - name: Build debug APK
-        run: gradle :app:assembleDebug --no-daemon --no-configuration-cache --no-build-cache --stacktrace
+        run: gradle :app:assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

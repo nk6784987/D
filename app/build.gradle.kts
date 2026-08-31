@@ -33,11 +33,13 @@ android {
     }
     create("debugConfig") {
       val customKeystore = file("${rootDir}/debug.keystore")
-      if (customKeystore.exists()) {
+      if (customKeystore.exists() && customKeystore.length() > 0) {
         storeFile = customKeystore
         storePassword = "android"
         keyAlias = "androiddebugkey"
         keyPassword = "android"
+      } else {
+        initWith(getByName("debug"))
       }
     }
   }
