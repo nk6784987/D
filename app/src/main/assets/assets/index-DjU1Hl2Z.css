@@ -1,0 +1,1 @@
+:root{--primary:#e50914;--bg:#0b0d13;--card-bg:#10131a;--text:#e5e7eb}body{background:var(--bg);color:var(--text);font-family:Montserrat,sans-serif} .nf-card{background:var(--card-bg)} .nf-primary-text{color:var(--primary)} .nf-primary-shadow{box-shadow:0 0 10px var(--primary)}
